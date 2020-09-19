@@ -88,9 +88,93 @@ public class PriceCalculator {
 	}
 	private void totalCalculatorWithPrice(int hours, double price)
 	{
-		System.out.println(hours);
-		System.out.println(price);
+		LinkedHashMap <String, LinkedHashMap<String, Integer>> finalServerCountDetails = new LinkedHashMap <String, LinkedHashMap<String, Integer>>();
+		LinkedHashMap <String, Integer> finalInnerServerCountDetails;
+		LinkedHashMap <String, Double> finalServerPriceDetails = new LinkedHashMap <String, Double>();
+		int dataRegionValid = 0;
+		for (String dataRegionName : Globals.instanceMap.keySet())  
+	    { 
+			finalInnerServerCountDetails = new LinkedHashMap<String, Integer>();
+			int tempprice = (int)((price*1000.0)/hours);
+			Vector<Integer> serverWeight = new Vector<Integer>();
+			Vector<Integer> serverPrice = new Vector<Integer>();
+			Vector<Integer> serverCount = new Vector<Integer>();
+			int i=0,j=0;
+			double totalCost = 0.0;
+			LinkedHashMap<String,Double> ServerDetails = Globals.instanceMap.get(dataRegionName);
+			for (String ServerTypeName : ServerDetails.keySet()){
+				serverWeight.add(Globals.serverTypeMap.get(ServerTypeName));
+				serverPrice.add((int)(ServerDetails.get(ServerTypeName)*1000));
+				serverCount.add(0);
+			}
+			int serverWeightCount = serverWeight.size();
+			int knapsackArray[][]=new int[serverWeightCount+1][tempprice+1];
+			for(i=0;i<=serverWeightCount;i++)
+			{
+				for(j=0;j<=tempprice;j++)
+				{
+					if(i==0 || j==0)
+						knapsackArray[i][j]=0;
+					else if(serverPrice.get(i-1)<=j)
+						knapsackArray[i][j] = max(serverWeight.get(i-1)+knapsackArray[i][j-serverPrice.get(i-1)],
+													knapsackArray[i-1][j]);
+					else
+						knapsackArray[i][j] = knapsackArray[i-1][j];
+				}
+			}
+			i=serverWeightCount;
+			j=tempprice;
+			if(knapsackArray[serverWeightCount][tempprice] != 0)
+			{
+				dataRegionValid++;
+				while (i > 0 && j > 0) {
+					if (knapsackArray[i][j] == knapsackArray[i - 1][j])
+						i--;
+					else {
+						j=j-serverPrice.get(i-1);
+						serverCount.set(i-1,serverCount.get(i-1)+1);
+					}
+				}
+				for(i=0;i<serverWeightCount;i++)
+				{
+					totalCost = totalCost + (serverPrice.get(i)*serverCount.get(i));
+				}
+				totalCost = totalCost * hours / 1000.0;
+				totalCost = Math.round(totalCost * 100.0)/100.0;
+				finalServerPriceDetails.put(dataRegionName,totalCost);
+				for(i=0;i<serverWeightCount;i++)
+				{
+					if(serverCount.get(i)!=0)
+					{
+						for (String serverTypeMapString : Globals.serverTypeMap.keySet())
+						{
+							if(Globals.serverTypeMap.get(serverTypeMapString) == serverWeight.get(i))
+							{
+								finalInnerServerCountDetails.put(serverTypeMapString,serverCount.get(i));
+								break;
+							}
+						}						
+					}
+				}
+				finalServerCountDetails.put(dataRegionName, finalInnerServerCountDetails);
+			}
+			System.out.println(serverCount);
+			System.out.println(serverWeight);
+	    }
+		if(dataRegionValid>0)
+		{
+			PrintPriceDetails printDetails = new PrintPriceDetails();
+			printDetails.printServerPriceDetails(finalServerCountDetails, finalServerPriceDetails);
+		}
+		else
+		{
+			System.out.println("The Entered request could not be serviced");
+		}
 	}
+	public int max(int a, int b) 
+    { 
+        return (a > b) ? a : b; 
+    } 
 	private void totalCalculatorWithCPUandPrice(int hours, int cpus, double price)
 	{
 		System.out.println(hours);

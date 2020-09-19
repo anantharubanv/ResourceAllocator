@@ -27,7 +27,7 @@ public class PrintPriceDetails{
 	    { 
 			System.out.println("\t{");
 	    	System.out.println("\t\t\"region\" : \""+dataRegionName+"\",");
-	        System.out.println("\t\t\"total_cost\" : \""+finalServerPriceDetails.get(dataRegionName)+"\",");
+	        System.out.println("\t\t\"total_cost\" : \"$"+finalServerPriceDetails.get(dataRegionName)+"\",");
 	        System.out.println("\t\t\"servers\" : [");
 	        innerFinalServerCountDetails = new LinkedHashMap<String, Integer>();
 	        innerFinalServerCountDetails = finalServerCountDetails.get(dataRegionName);
