@@ -24,7 +24,6 @@ public class Globals {
 		innerInstanceMap.put("10xlarge",2.97);
 		instanceMap.put("us-west",innerInstanceMap);
 		innerInstanceMap = new LinkedHashMap<String, Double>();
-		innerInstanceMap.put("large",0.11);
 		innerInstanceMap.put("xlarge",0.20);
 		innerInstanceMap.put("4xlarge",0.67);
 		innerInstanceMap.put("8xlarge",1.18);
@@ -35,6 +34,6 @@ public class Globals {
 		serverTypeMap.put("2xlarge",4);
 		serverTypeMap.put("4xlarge",8);
 		serverTypeMap.put("8xlarge",16);
-		serverTypeMap.put("10xlarge",32);		
+		serverTypeMap.put("10xlarge",32);	
 	}
 }
