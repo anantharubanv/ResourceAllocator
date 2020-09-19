@@ -116,7 +116,7 @@ public class PriceCalculator {
 					if(i==0 || j==0)
 						knapsackArray[i][j]=0;
 					else if(serverPrice.get(i-1)<=j)
-						knapsackArray[i][j] = max(serverWeight.get(i-1)+knapsackArray[i][j-serverPrice.get(i-1)],
+						knapsackArray[i][j] = Math.max(serverWeight.get(i-1)+knapsackArray[i][j-serverPrice.get(i-1)],
 													knapsackArray[i-1][j]);
 					else
 						knapsackArray[i][j] = knapsackArray[i-1][j];
@@ -171,15 +171,95 @@ public class PriceCalculator {
 			System.out.println("The Entered request could not be serviced");
 		}
 	}
-	public int max(int a, int b) 
-    { 
-        return (a > b) ? a : b; 
-    } 
 	private void totalCalculatorWithCPUandPrice(int hours, int cpus, double price)
 	{
-		System.out.println(hours);
-		System.out.println(cpus);
-		System.out.println(price);
+		LinkedHashMap <String, LinkedHashMap<String, Integer>> finalServerCountDetails = new LinkedHashMap <String, LinkedHashMap<String, Integer>>();
+		LinkedHashMap <String, Integer> finalInnerServerCountDetails;
+		LinkedHashMap <String, Double> finalServerPriceDetails = new LinkedHashMap <String, Double>();
+		int dataRegionValid = 0;
+		for (String dataRegionName : Globals.instanceMap.keySet())  
+	    { 
+			finalInnerServerCountDetails = new LinkedHashMap<String, Integer>();
+			int tempcpus = cpus;
+			Vector<Integer> serverWeight = new Vector<Integer>();
+			Vector<Double> serverPrice = new Vector<Double>();
+			Vector<Integer> serverCount = new Vector<Integer>();
+			int i=0,j=0;
+			double totalCost = 0.0;
+			LinkedHashMap<String,Double> ServerDetails = Globals.instanceMap.get(dataRegionName);
+			for (String ServerTypeName : ServerDetails.keySet()){
+				serverWeight.add(Globals.serverTypeMap.get(ServerTypeName));
+				serverPrice.add(ServerDetails.get(ServerTypeName));
+				serverCount.add(0);
+			}
+			if(cpus%(serverWeight.firstElement())!=0)
+			{
+				tempcpus = tempcpus - (cpus%(serverWeight.firstElement())) + (serverWeight.firstElement());
+			}
+			int serverWeightCount = serverWeight.size();
+			double knapsackArray[][]=new double[serverWeightCount+1][tempcpus+1];
+			
+			for(i=0;i<=tempcpus;i++)
+				knapsackArray[0][i]=Double.MAX_VALUE;
+			for(i=0;i<=serverWeightCount;i++)
+				knapsackArray[i][0]=0;
+			for(i=1;i<=serverWeightCount;i++)
+			{
+				for(j=1;j<=tempcpus;j++)
+				{
+					if(serverWeight.get(i-1)<=j)
+						knapsackArray[i][j] = Math.min(serverPrice.get(i-1)+knapsackArray[i][j-serverWeight.get(i-1)],
+								knapsackArray[i-1][j]);
+					else
+						knapsackArray[i][j] = knapsackArray[i-1][j];
+				}
+			}
+			i=serverWeightCount;
+			j=tempcpus;
+			totalCost = knapsackArray[serverWeightCount][tempcpus] * hours;
+			totalCost = Math.round(totalCost * 100.0)/100.0;
+			if(knapsackArray[serverWeightCount][tempcpus] != Double.MAX_VALUE && 
+					totalCost <= price)
+			{
+				dataRegionValid++;
+				while (i > 0 && j > 0) {
+					if (knapsackArray[i][j] == knapsackArray[i - 1][j])
+						i--;
+					else {
+						j=j-serverWeight.get(i-1);
+						serverCount.set(i-1,serverCount.get(i-1)+1);
+					}
+				}
+			}
+			finalServerPriceDetails.put(dataRegionName,totalCost);
+			for(i=0;i<serverWeightCount;i++)
+			{
+				if(serverCount.get(i)!=0)
+				{
+					for (String serverTypeMapString : Globals.serverTypeMap.keySet())
+					{
+						if(Globals.serverTypeMap.get(serverTypeMapString) == serverWeight.get(i))
+						{
+							finalInnerServerCountDetails.put(serverTypeMapString,serverCount.get(i));
+							break;
+						}
+					}						
+				}
+			}
+			finalServerCountDetails.put(dataRegionName, finalInnerServerCountDetails);
+			System.out.println(totalCost);
+			System.out.println(serverCount);
+			System.out.println(serverWeight);
+	    }
+		if(dataRegionValid>0)
+		{
+			PrintPriceDetails printDetails = new PrintPriceDetails();
+			printDetails.printServerPriceDetails(finalServerCountDetails, finalServerPriceDetails);
+		}
+		else
+		{
+			System.out.println("The Entered request could not be serviced");
+		}
 	}
 	public void get_costs(int hours,int cpus,double price)
 	{
