@@ -1,8 +1,26 @@
+/**
+*
+* The CloudResource Allocator implements an application that
+* helps users in purchasing cloud resource instances based
+* on their CPU needs & price affordable.
+* 
+*
+* @author  Anantharuban
+* @version 1.5
+* @since   2020-09-18 
+* 
+*/
+
 package main.java;
 import java.util.*;
 
 public class CloudResourceAllocator {
-
+	/**
+     * Launches the application and gets Input for purchase
+     * from the users.
+     * 
+     * @param args
+     */
 	public static void main(String[] args) {
 		Globals.initializeInstances();
 		while(true)

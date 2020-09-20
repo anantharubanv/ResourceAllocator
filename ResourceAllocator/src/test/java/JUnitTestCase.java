@@ -1,12 +1,21 @@
+/**
+*
+* The JUnitTestCase holds the function to test
+* the get_costs function in PriceCalculator Class.
+*
+* @author  Anantharuban
+* @version 1.1
+* @since   2020-09-20 
+* 
+*/
+
 package test.java;
 
-
 import static org.junit.Assert.*;
-
 import main.java.Globals;
 import main.java.PriceCalculator;
-
 import org.junit.Test;
+
 public class JUnitTestCase {
 
 	@Test
