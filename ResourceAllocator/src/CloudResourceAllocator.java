@@ -12,13 +12,15 @@ public class CloudResourceAllocator {
 			System.out.println("[1] Purchase based on minimum CPU need");
 			System.out.println("[2] Purchase based on maximum price affordable");
 			System.out.println("[3] Purchase based on both minimum CPU need & price affordable");
+			System.out.println("[4] Exit");
 			System.out.println("");
-			System.out.println("Enter your choice (1 or 2 or 3):");
+			System.out.println("Enter your choice (1 or 2 or 3 or 4):");
 			int cpus=0, hours=0;
 			double price=0.0;
 			PriceCalculator pricecalc = new PriceCalculator();
 			Scanner scanObj = new Scanner(System.in);
 			int choice = scanObj.nextInt();
+			int result = 0;
 			switch (choice)
 			{
 			case 1:
@@ -34,8 +36,14 @@ public class CloudResourceAllocator {
 				}
 				else
 				{
-					pricecalc.get_costs(hours, cpus, 0.0);
-					break;
+					result = pricecalc.get_costs(hours, cpus, 0.0);
+					if (result==0)
+					{
+						System.out.println("The Entered request could not be serviced");
+						break;
+					}
+					else
+						break;
 				}
 				case 2:
 					System.out.println("Enter the maximum price affordable :");
@@ -50,8 +58,14 @@ public class CloudResourceAllocator {
 					}
 					else
 					{
-						pricecalc.get_costs(hours, 0, price);
-						break;
+						result = pricecalc.get_costs(hours, 0, price);
+						if (result==0)
+						{
+							System.out.println("The Entered request could not be serviced");
+							break;
+						}
+						else
+							break;
 					}
 				case 3:
 					System.out.println("Enter the minimum no. of CPUs needed :");
@@ -68,10 +82,20 @@ public class CloudResourceAllocator {
 					}
 					else
 					{
-						pricecalc.get_costs(hours, cpus, price);
-						break;
+						result = pricecalc.get_costs(hours, cpus, price);
+						if (result==0)
+						{
+							System.out.println("The Entered request could not be serviced");
+							break;
+						}
+						else
+							break;
 					}
+				case 4:
+					scanObj.close();
+					System.exit(1);
 				default:
+					System.out.println("Enter valid choice");
 					break;	
 			}
 		}

@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class PriceCalculator {
-	private void totalCalculatorWithCPU(int hours, int cpus)
+	private int totalCalculatorWithCPU(int hours, int cpus)
 	{
 		LinkedHashMap <String, LinkedHashMap<String, Integer>> finalServerCountDetails = new LinkedHashMap <String, LinkedHashMap<String, Integer>>();
 		LinkedHashMap <String, Integer> finalInnerServerCountDetails;
@@ -77,13 +77,14 @@ public class PriceCalculator {
 		{
 			PrintPriceDetails printDetails = new PrintPriceDetails();
 			printDetails.printServerPriceDetails(finalServerCountDetails, finalServerPriceDetails);
+			return 1;
 		}
 		else
 		{
-			System.out.println("The Entered request could not be serviced");
+			return 0;
 		}
 	}
-	private void totalCalculatorWithPrice(int hours, double price)
+	private int totalCalculatorWithPrice(int hours, double price)
 	{
 		LinkedHashMap <String, LinkedHashMap<String, Integer>> finalServerCountDetails = new LinkedHashMap <String, LinkedHashMap<String, Integer>>();
 		LinkedHashMap <String, Integer> finalInnerServerCountDetails;
@@ -160,13 +161,14 @@ public class PriceCalculator {
 		{
 			PrintPriceDetails printDetails = new PrintPriceDetails();
 			printDetails.printServerPriceDetails(finalServerCountDetails, finalServerPriceDetails);
+			return 1;
 		}
 		else
 		{
-			System.out.println("The Entered request could not be serviced");
+			return 0;
 		}
 	}
-	private void totalCalculatorWithCPUandPrice(int hours, int cpus, double price)
+	private int totalCalculatorWithCPUandPrice(int hours, int cpus, double price)
 	{
 		LinkedHashMap <String, LinkedHashMap<String, Integer>> finalServerCountDetails = new LinkedHashMap <String, LinkedHashMap<String, Integer>>();
 		LinkedHashMap <String, Integer> finalInnerServerCountDetails;
@@ -248,25 +250,40 @@ public class PriceCalculator {
 		{
 			PrintPriceDetails printDetails = new PrintPriceDetails();
 			printDetails.printServerPriceDetails(finalServerCountDetails, finalServerPriceDetails);
+			return 1;
 		}
 		else
 		{
-			System.out.println("The Entered request could not be serviced");
+			return 0;
 		}
 	}
-	public void get_costs(int hours,int cpus,double price)
+	public int get_costs(int hours,int cpus,double price)
 	{
+		int result = 0;
 		if(price == 0.0)
 		{
-			totalCalculatorWithCPU(hours,cpus);
+			result = totalCalculatorWithCPU(hours,cpus);
+			if(result==0)
+				return 0;
+			if(result==1)
+				return 1;
 		}
 		else if(cpus == 0)
 		{
-			totalCalculatorWithPrice(hours,price);
+			result = totalCalculatorWithPrice(hours,price);
+			if(result==0)
+				return 0;
+			if(result==1)
+				return 1;
 		}
 		else
 		{
-			totalCalculatorWithCPUandPrice(hours,cpus,price);
+			result = totalCalculatorWithCPUandPrice(hours,cpus,price);
+			if (result==0)
+				return 0;
+			if (result==1)
+				return 1;
 		}
+		return 0;
 	}
 }
