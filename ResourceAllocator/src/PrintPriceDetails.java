@@ -6,8 +6,6 @@ public class PrintPriceDetails{
 	public void printServerPriceDetails(LinkedHashMap <String, LinkedHashMap<String, Integer>> finalServerCountDetails, 
 							LinkedHashMap <String, Double> finalServerPriceDetails)
 	{
-		System.out.println(finalServerPriceDetails);
-		System.out.println(finalServerCountDetails);
 		LinkedHashMap<String, Integer> innerFinalServerCountDetails;
 		List<Map.Entry<String, Double>> priceEntries = new ArrayList<Map.Entry<String, Double>>(finalServerPriceDetails.entrySet());
 		Collections.sort(priceEntries, new Comparator<Map.Entry<String, Double>>(){
@@ -18,13 +16,16 @@ public class PrintPriceDetails{
 			}
 		});
 		finalServerPriceDetails.clear();
+		int totalDataregions = 0, totalServerTypes=0;
+		int totalDataregionsCount = 0,totalServerTypesCount=0;
 		for(Map.Entry<String, Double> entry : priceEntries)
 		{
 			finalServerPriceDetails.put(entry.getKey(),entry.getValue());
+			totalDataregions++;
 		}
 		System.out.println("[");
 		for (String dataRegionName : finalServerPriceDetails.keySet())  
-	    { 
+	    {  
 			System.out.println("\t{");
 	    	System.out.println("\t\t\"region\" : \""+dataRegionName+"\",");
 	        System.out.println("\t\t\"total_cost\" : \"$"+finalServerPriceDetails.get(dataRegionName)+"\",");
@@ -33,11 +34,31 @@ public class PrintPriceDetails{
 	        innerFinalServerCountDetails = finalServerCountDetails.get(dataRegionName);
 	        for(String ServerTypeName : innerFinalServerCountDetails.keySet())
 	        {
-	        	System.out.println("\t\t\t(\""+ServerTypeName+"\","+innerFinalServerCountDetails.get(ServerTypeName)+"),");
+	        	totalServerTypes++;
+	        }
+	        for(String ServerTypeName : innerFinalServerCountDetails.keySet())
+	        {
+	        	totalServerTypesCount++;
+	        	if(totalServerTypesCount == totalServerTypes)
+	        	{
+	        		System.out.println("\t\t\t(\""+ServerTypeName+"\","+innerFinalServerCountDetails.get(ServerTypeName)+")");
+	        	}
+	        	else
+	        	{
+	        		System.out.println("\t\t\t(\""+ServerTypeName+"\","+innerFinalServerCountDetails.get(ServerTypeName)+"),");
+	        	}
 	        }
 	        System.out.println("\t\t]");
-	        System.out.println("\t}");
+	        totalDataregionsCount++;
+	        if(totalDataregionsCount == totalDataregions)
+	        {
+	        	System.out.println("\t}");
+	        }
+	        else
+	        {
+	        	System.out.println("\t},");
+	        }
 	    }
-        System.out.println("],");
+        System.out.println("]");
 	}
 }

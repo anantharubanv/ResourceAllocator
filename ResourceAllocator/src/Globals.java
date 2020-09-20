@@ -4,7 +4,6 @@ public class Globals {
 	public static LinkedHashMap <String, LinkedHashMap<String, Double>> instanceMap;
 	public static LinkedHashMap<String, Double> innerInstanceMap;
 	public static LinkedHashMap<String, Integer> serverTypeMap;
-	public static int totalDataCenterRegions;
 	public static void initializeInstances()
 	{
 		instanceMap = new LinkedHashMap <String, LinkedHashMap<String, Double>>();

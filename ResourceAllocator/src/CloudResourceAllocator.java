@@ -4,10 +4,6 @@ public class CloudResourceAllocator {
 
 	public static void main(String[] args) {
 		Globals.initializeInstances();
-		for (String dataRegionName : Globals.instanceMap.keySet())  
-	    { 
-	        Globals.totalDataCenterRegions++;
-	    }
 		while(true)
 		{
 			System.out.println("****************************************************************");
@@ -18,10 +14,10 @@ public class CloudResourceAllocator {
 			System.out.println("[3] Purchase based on both minimum CPU need & price affordable");
 			System.out.println("");
 			System.out.println("Enter your choice (1 or 2 or 3):");
-			Scanner scanObj = new Scanner(System.in);
 			int cpus=0, hours=0;
 			double price=0.0;
 			PriceCalculator pricecalc = new PriceCalculator();
+			Scanner scanObj = new Scanner(System.in);
 			int choice = scanObj.nextInt();
 			switch (choice)
 			{
@@ -30,6 +26,7 @@ public class CloudResourceAllocator {
 				cpus = scanObj.nextInt();
 				System.out.println("Enter the no. of Hours the servers are needed :");
 				hours = scanObj.nextInt();
+				System.out.println("");
 				if(cpus<=0 || hours<=0)
 				{
 					System.out.println("Enter valid input");
@@ -45,6 +42,7 @@ public class CloudResourceAllocator {
 					price = scanObj.nextDouble();
 					System.out.println("Enter the no. of Hours the servers are needed :");
 					hours = scanObj.nextInt();
+					System.out.println("");
 					if(price<=0.0 || hours<=0)
 					{
 						System.out.println("Enter valid input");
@@ -62,6 +60,7 @@ public class CloudResourceAllocator {
 					price = scanObj.nextDouble();
 					System.out.println("Enter the no. of Hours the servers are needed :");
 					hours = scanObj.nextInt();
+					System.out.println("");
 					if(cpus<=0 || price<=0.0 || hours<=0)
 					{
 						System.out.println("Enter valid input");

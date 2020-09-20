@@ -71,9 +71,6 @@ public class PriceCalculator {
 					}
 				}
 				finalServerCountDetails.put(dataRegionName, finalInnerServerCountDetails);
-				System.out.println(totalCost);
-				System.out.println(serverCount);
-				System.out.println(serverWeight);
 			}
 		}
 		if(validRequest > 0)
@@ -158,8 +155,6 @@ public class PriceCalculator {
 				}
 				finalServerCountDetails.put(dataRegionName, finalInnerServerCountDetails);
 			}
-			System.out.println(serverCount);
-			System.out.println(serverWeight);
 	    }
 		if(dataRegionValid>0)
 		{
@@ -230,26 +225,24 @@ public class PriceCalculator {
 						serverCount.set(i-1,serverCount.get(i-1)+1);
 					}
 				}
-			}
-			finalServerPriceDetails.put(dataRegionName,totalCost);
-			for(i=0;i<serverWeightCount;i++)
-			{
-				if(serverCount.get(i)!=0)
+			
+				finalServerPriceDetails.put(dataRegionName,totalCost);
+				for(i=0;i<serverWeightCount;i++)
 				{
-					for (String serverTypeMapString : Globals.serverTypeMap.keySet())
+					if(serverCount.get(i)!=0)
 					{
-						if(Globals.serverTypeMap.get(serverTypeMapString) == serverWeight.get(i))
+						for (String serverTypeMapString : Globals.serverTypeMap.keySet())
 						{
-							finalInnerServerCountDetails.put(serverTypeMapString,serverCount.get(i));
-							break;
-						}
-					}						
+							if(Globals.serverTypeMap.get(serverTypeMapString) == serverWeight.get(i))
+							{
+								finalInnerServerCountDetails.put(serverTypeMapString,serverCount.get(i));
+								break;
+							}
+						}						
+					}
 				}
+				finalServerCountDetails.put(dataRegionName, finalInnerServerCountDetails);
 			}
-			finalServerCountDetails.put(dataRegionName, finalInnerServerCountDetails);
-			System.out.println(totalCost);
-			System.out.println(serverCount);
-			System.out.println(serverWeight);
 	    }
 		if(dataRegionValid>0)
 		{
