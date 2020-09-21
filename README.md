@@ -1,8 +1,8 @@
 # ResourceAllocator
-Selects and displays the various choices of Cloud servers from the available instances based on the Customer's need.
+Selects and prints various choices of Cloud servers from the available instances based on the Customer's need.
 
 ## Language(s) Used
-JAVA
+Java
 
 ## Installation
 - Use any Java IDE and clone the repository.
