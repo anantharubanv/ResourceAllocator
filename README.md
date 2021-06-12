@@ -1,4 +1,4 @@
-# ResourceAllocator
+# Cloud server ResourceAllocator
 Selects and prints various choices of cloud servers from the available Data-center instances based on the customer's need.
 
 ## Language(s) Used
